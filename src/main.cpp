@@ -27,20 +27,25 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
     return std::move(contents);
 }
 
-void inputs(float& start_x, float& start_y, float& end_x, float& end_y){
-    std::cout << "Enter the start x position (0 - 100): ";
-    std::cin >> start_x;
-    std::cout << "\n";
-    std::cout << "Enter the start y position (0 - 100): ";
-    std::cin >> start_y;
-    std::cout << "\n";
-    std::cout << "Enter the end x position (0 - 100): ";
-    std::cin >> end_x;
-    std::cout << "\n";
-    std::cout << "Enter the end y position (0 - 100): ";
-    std::cin >> end_y;
-    std::cout << "\n";
+// check if the user's input is in range 0 - 100
+bool checkRange(float user_input){
+    return ((user_input > 0) && (user_input < 101));
 }
+
+// get the input of position
+float getInput(float position){
+    std::cin >> position;
+    std::cout << "\n";
+
+    // check the value (the value must be in range 0 - 100)
+    if(checkRange(position)){
+        return position;
+    }else{
+        std::cout << "Please enter the corrrect position between 1 - 100: ";
+        getInput(position);
+    }
+}
+
 
 int main(int argc, const char **argv)
 {    
@@ -72,13 +77,15 @@ int main(int argc, const char **argv)
     // user input for these values using std::cin. Pass the user input to the
     // RoutePlanner object below in place of 10, 10, 90, 90.
     float start_x, start_y, end_x, end_y;
-    inputs(start_x, start_y, end_x, end_y);
-
-    if(((start_x < 0 && start_x > 100) && (start_y < 0 && start_y > 100)) &&
-       ((end_x < 0 && end_x > 100) && (end_y < 0 && end_y > 100))){
-       std::cout << "Please enter value between 0 - 100, otherwise we can't process.";
-       return 0;
-    }
+    
+    std::cout << "Please enter the start x position: ";
+    getInput(start_x);
+    std::cout << "Please enter the start y position: ";
+    getInput(start_y);
+    std::cout << "Please enter the end x position: ";
+    getInput(end_x);
+    std::cout << "Please enter the end y position: ";
+    getInput(end_y);
 
     // Build Model.
     RouteModel model{osm_data};
